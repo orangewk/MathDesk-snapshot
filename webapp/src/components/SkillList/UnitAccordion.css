@@ -1,0 +1,134 @@
+/**
+ * ユニットアコーディオンスタイル
+ * ティールダークテーマ
+ */
+
+.unit-accordion {
+  margin-bottom: 4px;
+}
+
+.unit-accordion__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background-color: var(--bg-elevated);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+  border: 1px solid transparent;
+}
+
+.unit-accordion__header:hover {
+  background-color: var(--bg-hover);
+  border-color: var(--border-color);
+}
+
+.unit-accordion__header:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent-light);
+}
+
+.unit-accordion__toggle {
+  font-size: 10px;
+  color: var(--text-muted);
+  width: 12px;
+  text-align: center;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.unit-accordion__header:hover .unit-accordion__toggle {
+  color: var(--accent);
+}
+
+.unit-accordion__name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.unit-accordion__count {
+  font-size: 12px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.unit-accordion__progress {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.unit-accordion__progress .progress-bar {
+  width: 60px;
+}
+
+.unit-accordion__progress-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  min-width: 36px;
+  text-align: right;
+}
+
+.unit-accordion__action-button {
+  flex-shrink: 0;
+  padding: 3px 10px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--info);
+  background: rgba(96, 165, 250, 0.1);
+  border: 1px solid rgba(96, 165, 250, 0.3);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.unit-accordion__action-button:hover {
+  background: rgba(96, 165, 250, 0.2);
+  border-color: var(--info);
+}
+
+.unit-accordion__action-button--assess {
+  color: var(--warning);
+  background: rgba(251, 191, 36, 0.1);
+  border-color: rgba(251, 191, 36, 0.3);
+}
+
+.unit-accordion__action-button--assess:hover {
+  background: rgba(251, 191, 36, 0.2);
+  border-color: var(--warning);
+}
+
+.unit-accordion__skip-button {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--accent);
+  background: rgba(20, 184, 166, 0.1);
+  border: 1px solid rgba(20, 184, 166, 0.3);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.unit-accordion__skip-button:hover {
+  background: rgba(20, 184, 166, 0.2);
+  border-color: var(--accent);
+}
+
+.unit-accordion__content {
+  padding: 4px 0 4px 20px;
+}

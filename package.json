@@ -1,0 +1,23 @@
+{
+  "name": "mathdesk",
+  "version": "0.1.0",
+  "description": "MathDesk - AI-Assisted Math Learning Tool for Students",
+  "scripts": {
+    "dev": "concurrently --kill-others --kill-others-on-fail \"npm run dev:server\" \"npm run dev:webapp\"",
+    "dev:server": "cd prototype && npm run server",
+    "dev:webapp": "cd webapp && npm run dev",
+    "install:all": "npm install && cd prototype && npm install && cd ../webapp && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": [
+    "math",
+    "education",
+    "ai",
+    "gemini",
+    "learning"
+  ],
+  "author": "MathDesk Team",
+  "license": "MIT"
+}

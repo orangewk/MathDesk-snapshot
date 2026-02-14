@@ -1,0 +1,37 @@
+{
+  "name": "mathdesk-webapp",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "demo:narration": "tsx ../scripts/demo-video/generate-narration.ts",
+    "demo:studio": "npx remotion studio remotion/index.ts",
+    "demo:render": "npx remotion render remotion/index.ts DemoVideo out/demo.mp4",
+    "demo:render:test": "npx remotion render remotion/index.ts TestAudioVideo out/test-audio.mp4"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.421",
+    "@remotion/player": "4.0.421",
+    "@remotion/tailwind-v4": "4.0.421",
+    "@remotion/transitions": "4.0.421",
+    "firebase": "^12.8.0",
+    "jsxgraph": "^1.8.0",
+    "katex": "^0.16.9",
+    "mathlive": "^0.108.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-markdown": "^9.0.1",
+    "rehype-katex": "^7.0.1",
+    "remark-math": "^6.0.0",
+    "remotion": "4.0.421"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@vitejs/plugin-react": "^4.2.1",
+    "typescript": "^5.3.3",
+    "vite": "^7.3.1"
+  }
+}

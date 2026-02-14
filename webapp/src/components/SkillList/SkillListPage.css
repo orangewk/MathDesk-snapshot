@@ -1,0 +1,258 @@
+/**
+ * スキル一覧ページスタイル
+ * ティールダークテーマ
+ */
+
+.skill-list-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: var(--bg-base);
+}
+
+/* ========================================
+   Loading
+   ======================================== */
+.skill-list-page--loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  color: var(--text-secondary);
+}
+
+.skill-list-page__spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ========================================
+   Error
+   ======================================== */
+.skill-list-page--error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.skill-list-page__error-message {
+  color: var(--error);
+  margin-bottom: 16px;
+}
+
+.skill-list-page__retry-button {
+  padding: 10px 20px;
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(20, 184, 166, 0.3);
+}
+
+.skill-list-page__retry-button:hover {
+  background-color: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(20, 184, 166, 0.4);
+}
+
+/* ========================================
+   View Tabs
+   ======================================== */
+.skill-list-page__view-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 4px;
+  background-color: var(--bg-surface);
+  border-radius: var(--radius-md);
+  width: fit-content;
+}
+
+.view-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background-color: transparent;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.view-tab:hover {
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+.view-tab--active {
+  background-color: var(--accent);
+  color: white;
+  box-shadow: 0 2px 8px rgba(20, 184, 166, 0.3);
+}
+
+.view-tab--active:hover {
+  background-color: var(--accent-hover);
+  color: white;
+}
+
+.view-tab__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.view-tab:not(.view-tab--active) .view-tab__badge {
+  background-color: var(--bg-elevated);
+}
+
+/* ========================================
+   Content Layout
+   ======================================== */
+.skill-list-page__content {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 16px;
+  flex: 1;
+}
+
+/* スキルリスト */
+.skill-list-page__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  max-height: calc(100vh - 200px);
+  padding-right: 4px;
+}
+
+/* サイドバー */
+.skill-list-page__sidebar {
+  position: sticky;
+  top: 16px;
+  height: fit-content;
+  max-height: calc(100vh - 200px);
+}
+
+/* ========================================
+   Skill Cards View
+   ======================================== */
+.skill-list-page__cards {
+  grid-column: 1 / -1;
+  overflow-y: auto;
+  max-height: calc(100vh - 240px);
+  padding-right: 4px;
+}
+
+.skill-list-page__cards-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  color: var(--text-secondary);
+}
+
+.skill-list-page__cards-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  padding: 24px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--error);
+  border-radius: var(--radius-lg);
+  color: var(--error);
+}
+
+/* ========================================
+   Empty State
+   ======================================== */
+.skill-list-page__empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  color: var(--text-muted);
+}
+
+/* ========================================
+   Responsive
+   ======================================== */
+@media (max-width: 900px) {
+  .skill-list-page__content {
+    grid-template-columns: 1fr;
+  }
+
+  .skill-list-page__sidebar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
+    max-height: 60vh;
+    z-index: 100;
+    padding: 0;
+    background-color: transparent;
+  }
+
+  .skill-list-page__list {
+    max-height: none;
+    padding-bottom: 80px;
+  }
+}
+
+@media (max-width: 600px) {
+  .skill-list-page {
+    padding: 12px;
+  }
+
+  .skill-list-page__view-tabs {
+    width: 100%;
+  }
+
+  .view-tab {
+    flex: 1;
+    justify-content: center;
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .skill-list-page__cards {
+    max-height: none;
+    padding-bottom: 80px;
+  }
+}

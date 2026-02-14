@@ -1,0 +1,67 @@
+/* ==========================================
+   ProblemDisplay - 問題表示
+   ========================================== */
+
+.problem-display {
+  padding: 16px;
+  background-color: var(--bg-elevated);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+}
+
+.problem-display__level-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  margin-bottom: 12px;
+  background-color: var(--accent-light);
+  color: var(--accent);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.problem-display__question {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--text-primary);
+}
+
+.problem-display__question .katex-display {
+  margin: 12px 0;
+}
+
+.problem-display__figure-desc {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background-color: var(--bg-surface);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  color: var(--text-secondary);
+  border-left: 3px solid var(--info);
+}
+
+/* 図ローディング */
+.problem-display__figure-loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 16px;
+  background-color: var(--bg-surface);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.problem-display__figure-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border-color);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: figure-spin 0.8s linear infinite;
+}
+
+@keyframes figure-spin {
+  to { transform: rotate(360deg); }
+}

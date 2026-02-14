@@ -1,0 +1,415 @@
+/**
+ * スキル詳細サイドバースタイル
+ * ティールダークテーマ
+ */
+
+.skill-detail-sidebar {
+  background-color: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  padding: 16px;
+  height: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.skill-detail-sidebar--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.skill-detail-sidebar__empty-message {
+  color: var(--text-muted);
+  font-size: 14px;
+  text-align: center;
+}
+
+/* ========================================
+   Header
+   ======================================== */
+.skill-detail-sidebar__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.skill-detail-sidebar__title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.skill-detail-sidebar__title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.skill-detail-sidebar__close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: color 0.2s;
+}
+
+.skill-detail-sidebar__close:hover {
+  color: var(--text-primary);
+}
+
+/* ========================================
+   Status
+   ======================================== */
+.skill-detail-sidebar__status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.skill-detail-sidebar__badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.skill-detail-sidebar__badge--locked {
+  background-color: var(--bg-elevated);
+  color: var(--text-muted);
+}
+
+.skill-detail-sidebar__badge--unlocked {
+  background-color: rgba(20, 184, 166, 0.15);
+  color: var(--accent);
+}
+
+.skill-detail-sidebar__badge--learning {
+  background-color: rgba(251, 191, 36, 0.15);
+  color: var(--warning);
+}
+
+.skill-detail-sidebar__badge--mastered {
+  background-color: rgba(74, 222, 128, 0.15);
+  color: var(--success);
+}
+
+.skill-detail-sidebar__badge--perfect {
+  background-color: rgba(251, 191, 36, 0.2);
+  color: var(--warning);
+}
+
+.skill-detail-sidebar__mastery-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* 進捗バー */
+.skill-detail-sidebar__progress {
+  margin-bottom: 4px;
+}
+
+/* ========================================
+   Rank Guide
+   ======================================== */
+.skill-detail-sidebar__rank-guide {
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+}
+
+.skill-detail-sidebar__rank-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.skill-detail-sidebar__rank-text--progress {
+  color: var(--info);
+  font-weight: 500;
+}
+
+.skill-detail-sidebar__rank-text--master {
+  color: var(--warning);
+  font-weight: 600;
+}
+
+/* ========================================
+   Meta Info
+   ======================================== */
+.skill-detail-sidebar__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background-color: var(--bg-elevated);
+  border-radius: var(--radius-md);
+}
+
+.skill-detail-sidebar__meta-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+
+.skill-detail-sidebar__meta-label {
+  color: var(--text-muted);
+}
+
+.skill-detail-sidebar__meta-value {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* ========================================
+   Description
+   ======================================== */
+.skill-detail-sidebar__description {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.skill-detail-sidebar__description p {
+  margin: 0;
+}
+
+/* ========================================
+   Actions
+   ======================================== */
+.skill-detail-sidebar__actions {
+  padding-top: 8px;
+}
+
+/* プライマリアクションボタン */
+.skill-detail-sidebar__primary-button {
+  width: 100%;
+  padding: 12px 16px;
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(20, 184, 166, 0.3);
+}
+
+.skill-detail-sidebar__primary-button:hover {
+  background-color: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(20, 184, 166, 0.4);
+}
+
+.skill-detail-sidebar__primary-button--assess {
+  background-color: #f59e0b;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+}
+
+.skill-detail-sidebar__primary-button--assess:hover {
+  background-color: #d97706;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+}
+
+/* 習得済み表示 */
+.skill-detail-sidebar__completed {
+  text-align: center;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--success);
+  background-color: rgba(74, 222, 128, 0.1);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  border-radius: var(--radius-md);
+}
+
+/* セカンダリアクション（テキストリンク） */
+.skill-detail-sidebar__secondary-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.skill-detail-sidebar__secondary-link {
+  background: none;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px 0;
+  transition: color 0.15s;
+}
+
+.skill-detail-sidebar__secondary-link:hover {
+  color: var(--accent);
+}
+
+/* 警告メッセージ（前提スキル未習得時） */
+.skill-detail-sidebar__warning {
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  background-color: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  color: var(--warning);
+  line-height: 1.5;
+}
+
+.skill-detail-sidebar__warning-hint {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+
+/* ========================================
+   Section
+   ======================================== */
+.skill-detail-sidebar__section {
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.skill-detail-sidebar__section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin: 0 0 8px 0;
+}
+
+.skill-detail-sidebar__skill-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.skill-detail-sidebar__skill-link {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 6px 10px;
+  background-color: var(--bg-elevated);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--accent);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.skill-detail-sidebar__skill-link:hover {
+  background-color: var(--accent-light);
+  border-color: var(--accent);
+}
+
+.skill-detail-sidebar__more {
+  font-size: 12px;
+  color: var(--text-muted);
+  padding: 4px 10px;
+}
+
+/* ========================================
+   Techniques
+   ======================================== */
+.skill-detail-sidebar__technique-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.skill-detail-sidebar__technique-card {
+  padding: 8px 10px;
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+}
+
+.skill-detail-sidebar__technique-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.skill-detail-sidebar__technique-name .math-text,
+.skill-detail-sidebar__technique-trigger .math-text {
+  font-size: inherit;
+}
+
+.skill-detail-sidebar__technique-name .markdown-content p,
+.skill-detail-sidebar__technique-trigger .markdown-content p {
+  margin: 0;
+}
+
+.skill-detail-sidebar__technique-trigger {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* ========================================
+   Stats
+   ======================================== */
+.skill-detail-sidebar__stats {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  background-color: var(--bg-elevated);
+  border-radius: var(--radius-md);
+  margin-top: auto;
+}
+
+.skill-detail-sidebar__stat {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.skill-detail-sidebar__stat-label {
+  color: var(--text-muted);
+}
+
+.skill-detail-sidebar__stat-value {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* ========================================
+   Responsive
+   ======================================== */
+@media (max-width: 767px) {
+  .skill-detail-sidebar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-height: 60vh;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    z-index: 100;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+  }
+}

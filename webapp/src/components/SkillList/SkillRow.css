@@ -1,0 +1,113 @@
+/**
+ * スキル行スタイル
+ * ティールダークテーマ
+ */
+
+.skill-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+  border: 1px solid transparent;
+}
+
+.skill-row:hover {
+  background-color: var(--bg-elevated);
+  border-color: var(--border-color);
+}
+
+.skill-row:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent-light);
+}
+
+.skill-row--selected {
+  background-color: var(--accent-light);
+  border-color: var(--accent);
+}
+
+.skill-row--selected:hover {
+  background-color: rgba(20, 184, 166, 0.2);
+}
+
+/* 状態別スタイル */
+.skill-row--locked {
+  opacity: 0.5;
+}
+
+.skill-row--locked .skill-row__name {
+  color: var(--text-muted);
+}
+
+/* コンテンツ */
+.skill-row__content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.skill-row__name {
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 進捗表示 */
+.skill-row__progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.skill-row__progress .progress-bar {
+  flex: 1;
+  max-width: 100px;
+}
+
+.skill-row__progress-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  min-width: 32px;
+  text-align: right;
+}
+
+/* Rank バッジ */
+.skill-row__rank {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.skill-row__rank--lv1 {
+  background-color: rgba(96, 165, 250, 0.15);
+  color: var(--info);
+}
+
+.skill-row__rank--lv2 {
+  background-color: rgba(74, 222, 128, 0.15);
+  color: var(--success);
+}
+
+.skill-row__rank--master {
+  background-color: rgba(251, 191, 36, 0.15);
+  color: var(--warning);
+}
+
+/* 重要度マーク */
+.skill-row__importance {
+  color: var(--warning);
+  font-size: 12px;
+  flex-shrink: 0;
+}

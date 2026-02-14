@@ -1,0 +1,95 @@
+/* ==========================================
+   SkipChallengeModal - スキップ宣言固有スタイル
+   (PracticeModal のベーススタイルを共用)
+   ========================================== */
+
+/* イントロ */
+.skip-challenge__intro {
+  padding: 12px 16px;
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  border-radius: var(--radius-md);
+}
+
+.skip-challenge__intro-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0 0 10px;
+}
+
+.skip-challenge__target-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.skip-challenge__skill-tag {
+  display: inline-block;
+  padding: 3px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  background: rgba(20, 184, 166, 0.1);
+  color: var(--accent);
+  border: 1px solid rgba(20, 184, 166, 0.25);
+  border-radius: var(--radius-sm);
+}
+
+.skip-challenge__skill-tag--mastered {
+  background: rgba(74, 222, 128, 0.12);
+  color: var(--success);
+  border-color: rgba(74, 222, 128, 0.3);
+}
+
+/* 結果 */
+.skip-challenge__result {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.skip-challenge__result-header {
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  padding: 8px 0;
+}
+
+.skip-challenge__result-header--passed {
+  color: var(--success);
+}
+
+.skip-challenge__result-header--failed {
+  color: var(--warning);
+}
+
+.skip-challenge__result-feedback {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.skip-challenge__result-hint {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.skip-challenge__skipped-skills {
+  padding: 12px;
+  background: rgba(74, 222, 128, 0.06);
+  border: 1px solid rgba(74, 222, 128, 0.2);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.skip-challenge__skipped-label {
+  width: 100%;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--success);
+  margin: 0 0 4px;
+}

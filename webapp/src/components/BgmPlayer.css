@@ -1,0 +1,203 @@
+/* ========================================
+   BGM Player - フローティングミニプレイヤー
+   ======================================== */
+
+.bgm-player {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  z-index: 900;
+  font-family: var(--font-body);
+}
+
+/* ---- 折り畳みボタン ---- */
+.bgm-toggle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: rgba(30, 41, 59, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-md);
+}
+
+.bgm-toggle:hover {
+  background: rgba(30, 41, 59, 0.95);
+  border-color: var(--accent);
+  color: var(--text-secondary);
+}
+
+.bgm-toggle.active {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* パルスアニメーション（再生中） */
+.bgm-toggle.active::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 1px solid var(--accent);
+  animation: bgm-pulse 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes bgm-pulse {
+  0%, 100% { opacity: 0; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.15); }
+}
+
+/* ---- 展開パネル ---- */
+.bgm-panel {
+  position: absolute;
+  bottom: 48px;
+  right: 0;
+  width: 220px;
+  background: rgba(30, 41, 59, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lifted);
+  padding: 12px;
+  opacity: 0;
+  transform: translateY(8px) scale(0.95);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.bgm-panel.open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* トラック情報 */
+.bgm-track-info {
+  margin-bottom: 8px;
+}
+
+.bgm-track-name {
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bgm-track-artist {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+/* コントロール行 */
+.bgm-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.bgm-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: background 0.15s ease, color 0.15s ease;
+  padding: 0;
+}
+
+.bgm-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.bgm-btn-play {
+  width: 36px;
+  height: 36px;
+  font-size: 16px;
+  background: var(--accent-light);
+  color: var(--accent);
+}
+
+.bgm-btn-play:hover {
+  background: var(--accent);
+  color: var(--bg-base);
+}
+
+/* 音量スライダー行 */
+.bgm-volume-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bgm-volume-icon {
+  font-size: 12px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.bgm-volume-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--bg-elevated);
+  outline: none;
+  cursor: pointer;
+}
+
+.bgm-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.bgm-volume-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.3);
+}
+
+.bgm-volume-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: none;
+  cursor: pointer;
+}
+
+/* ---- レスポンシブ ---- */
+@media (max-width: 600px) {
+  .bgm-player {
+    bottom: 80px;
+    right: 12px;
+  }
+
+  .bgm-panel {
+    width: 200px;
+  }
+}

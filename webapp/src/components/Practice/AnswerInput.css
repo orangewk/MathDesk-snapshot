@@ -1,0 +1,118 @@
+/* ==========================================
+   AnswerInput - 回答入力
+   ========================================== */
+
+.answer-input {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.answer-input__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.answer-input__textarea {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  line-height: 1.6;
+  resize: vertical;
+  font-family: inherit;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.answer-input__textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.15);
+}
+
+.answer-input__textarea:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.answer-input__textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.answer-input__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.answer-input__hint {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.answer-input__submit {
+  padding: 8px 20px;
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.answer-input__submit:hover:not(:disabled) {
+  background-color: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.answer-input__submit:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Voice input */
+.answer-input__actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.answer-input__voice {
+  padding: 8px 12px;
+  background-color: var(--bg-elevated);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.answer-input__voice:hover:not(:disabled) {
+  background-color: var(--bg-hover, var(--bg-elevated));
+  color: var(--text-primary);
+}
+
+.answer-input__voice.recording {
+  background-color: #dc2626;
+  color: white;
+  border-color: #dc2626;
+  animation: answer-voice-pulse 1.2s infinite;
+}
+
+.answer-input__voice:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+@keyframes answer-voice-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(220, 38, 38, 0); }
+}

@@ -1,0 +1,239 @@
+/**
+ * スキル習得時の祝福演出スタイル
+ */
+
+.mastery-celebration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg,
+            rgba(102, 126, 234, 0.95) 0%,
+            rgba(118, 75, 162, 0.95) 100%);
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.mastery-celebration.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.celebration-content {
+    text-align: center;
+    color: white;
+    padding: 2rem;
+    animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes bounceIn {
+    0% {
+        transform: scale(0.3);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    70% {
+        transform: scale(0.95);
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* 紙吹雪エリア */
+.celebration-confetti {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.celebration-confetti .confetti {
+    font-size: 2rem;
+    animation: confettiFall 2s ease-in-out infinite;
+}
+
+.celebration-confetti .confetti:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.celebration-confetti .confetti:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.celebration-confetti .confetti:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+.celebration-confetti .confetti:nth-child(4) {
+    animation-delay: 0.6s;
+}
+
+.celebration-confetti .confetti:nth-child(5) {
+    animation-delay: 0.8s;
+}
+
+@keyframes confettiFall {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+
+    50% {
+        transform: translateY(-20px) rotate(15deg);
+        opacity: 0.7;
+    }
+}
+
+/* トロフィーアイコン */
+.celebration-icon {
+    font-size: 3.5rem;
+    margin-bottom: 0.75rem;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.celebration-expression {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 0.75rem;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+/* タイトル */
+.celebration-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0 0 0.75rem 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* スキル名 */
+.celebration-skill {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.375rem 1.25rem;
+    border-radius: 2rem;
+    display: inline-block;
+}
+
+/* メッセージ */
+.celebration-message {
+    font-size: 0.9375rem;
+    margin: 0.75rem 0 1.5rem 0;
+    opacity: 0.9;
+}
+
+/* アクションボタン群 */
+.celebration-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+}
+
+.celebration-actions.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.celebration-button {
+    background: white;
+    color: var(--info);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 3rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(20px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.celebration-button.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.celebration-button--primary {
+    opacity: 1;
+    transform: none;
+}
+
+.celebration-button--secondary {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.8);
+    box-shadow: none;
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+    opacity: 1;
+    transform: none;
+}
+
+.celebration-button--secondary:hover {
+    color: white;
+    box-shadow: none;
+}
+
+.celebration-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.celebration-button:active {
+    transform: scale(0.98);
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 480px) {
+    .celebration-title {
+        font-size: 1.5rem;
+    }
+
+    .celebration-skill {
+        font-size: 1rem;
+    }
+
+    .celebration-icon {
+        font-size: 3rem;
+    }
+
+    .celebration-confetti .confetti {
+        font-size: 1.25rem;
+    }
+}

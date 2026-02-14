@@ -1,0 +1,261 @@
+/**
+ * 学習トピックスタイル
+ * ティールダークテーマ
+ */
+
+.learning-topics-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeInTopics 0.2s ease-in;
+}
+
+@keyframes fadeInTopics {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.learning-topics-panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  max-width: 900px;
+  max-height: 90vh;
+  width: 95%;
+  box-shadow: var(--shadow-lifted);
+  display: flex;
+  flex-direction: column;
+  animation: slideUpTopics 0.3s ease-out;
+}
+
+@keyframes slideUpTopics {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.learning-topics-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 28px;
+  background: var(--accent);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  color: white;
+}
+
+.learning-topics-header h2 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.learning-topics-header .close-button {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  font-size: 1.5rem;
+  color: white;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  transition: background-color 0.2s;
+}
+
+.learning-topics-header .close-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.learning-topics-content {
+  padding: 28px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.learning-topics-intro {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  margin: 0 0 32px 0;
+  padding: 16px;
+  background-color: var(--accent-light);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--accent);
+}
+
+.topic-category {
+  margin-bottom: 32px;
+}
+
+.topic-category:last-child {
+  margin-bottom: 0;
+}
+
+.category-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 16px 0;
+  font-size: 1.35rem;
+  color: var(--text-primary);
+  font-weight: 600;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.category-icon {
+  font-size: 1.5rem;
+}
+
+.topic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.topic-card {
+  background: var(--bg-elevated);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.topic-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+  transform: scaleX(0);
+  transition: transform 0.2s;
+}
+
+.topic-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 4px 12px rgba(20, 184, 166, 0.2);
+  transform: translateY(-2px);
+}
+
+.topic-card:hover::before {
+  transform: scaleX(1);
+}
+
+.topic-card:active {
+  transform: translateY(0);
+}
+
+.topic-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.topic-description {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.learning-topics-footer {
+  padding: 20px 28px;
+  background-color: var(--bg-elevated);
+  border-top: 1px solid var(--border-color);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+.learning-topics-footer p {
+  margin: 0;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+/* スクロールバーのスタイリング */
+.learning-topics-content::-webkit-scrollbar {
+  width: 10px;
+}
+
+.learning-topics-content::-webkit-scrollbar-track {
+  background: var(--bg-elevated);
+  border-radius: 5px;
+}
+
+.learning-topics-content::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 5px;
+}
+
+.learning-topics-content::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .learning-topics-panel {
+    width: 98%;
+    max-height: 95vh;
+  }
+
+  .learning-topics-header {
+    padding: 20px;
+  }
+
+  .learning-topics-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .learning-topics-content {
+    padding: 20px;
+  }
+
+  .topic-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .category-title {
+    font-size: 1.2rem;
+  }
+
+  .learning-topics-footer {
+    padding: 16px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .learning-topics-intro {
+    font-size: 0.95rem;
+    padding: 12px;
+  }
+
+  .topic-card {
+    padding: 16px;
+  }
+
+  .topic-title {
+    font-size: 1rem;
+  }
+
+  .topic-description {
+    font-size: 0.85rem;
+  }
+}

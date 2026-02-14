@@ -1,0 +1,62 @@
+/**
+ * ステータスアイコンスタイル
+ * ティールダークテーマ
+ */
+
+.status-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.status-icon--sm {
+  font-size: 14px;
+  width: 20px;
+  height: 20px;
+}
+
+.status-icon--md {
+  font-size: 18px;
+  width: 24px;
+  height: 24px;
+}
+
+.status-icon--lg {
+  font-size: 24px;
+  width: 32px;
+  height: 32px;
+}
+
+/* 状態別スタイル */
+.status-icon--locked {
+  opacity: 0.4;
+  color: var(--text-muted);
+}
+
+.status-icon--unlocked {
+  color: var(--warning);
+}
+
+.status-icon--learning {
+  color: var(--accent);
+  animation: pulse 2s infinite;
+}
+
+.status-icon--mastered {
+  color: var(--success);
+}
+
+.status-icon--perfect {
+  color: var(--warning);
+  filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.5));
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}

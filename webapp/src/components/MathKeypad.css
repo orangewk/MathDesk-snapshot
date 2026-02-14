@@ -1,0 +1,204 @@
+/**
+ * 数学キーパッドスタイル
+ * ティールダークテーマ
+ */
+
+.math-keypad {
+  position: fixed;
+  bottom: 200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 800px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lifted);
+  overflow: hidden;
+  z-index: 1000;
+}
+
+/* ========================================
+   Header
+   ======================================== */
+.keypad-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: var(--accent);
+  color: white;
+}
+
+.keypad-title {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.keypad-close {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.2s;
+}
+
+.keypad-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ========================================
+   Preview Area
+   ======================================== */
+.keypad-preview {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-color);
+  min-height: 40px;
+}
+
+.preview-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.preview-content {
+  flex: 1;
+  background: var(--bg-surface);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  color: var(--text-primary);
+}
+
+/* ========================================
+   Category Tabs
+   ======================================== */
+.keypad-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.category-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 50px;
+}
+
+.category-button:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.category-button.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.category-icon {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.category-label {
+  font-size: 10px;
+  margin-top: 2px;
+}
+
+/* ========================================
+   Keypad Buttons
+   ======================================== */
+.keypad-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+  gap: 6px;
+  padding: 12px;
+  background: var(--bg-surface);
+}
+
+.math-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-size: 18px;
+  min-height: 44px;
+}
+
+.math-button:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+
+.math-button:active {
+  transform: translateY(0);
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.button-display {
+  font-family: 'Cambria Math', 'Latin Modern Math', serif;
+}
+
+/* ========================================
+   Responsive
+   ======================================== */
+@media (max-width: 600px) {
+  .keypad-categories {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .category-button {
+    flex-shrink: 0;
+  }
+
+  .keypad-buttons {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (min-width: 601px) and (max-width: 1024px) {
+  .keypad-buttons {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media (min-width: 1025px) {
+  .keypad-buttons {
+    grid-template-columns: repeat(8, 1fr);
+  }
+}

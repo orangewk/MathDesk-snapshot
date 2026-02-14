@@ -1,0 +1,83 @@
+/**
+ * カテゴリアコーディオンスタイル
+ * ティールダークテーマ
+ */
+
+.category-accordion {
+  margin-bottom: 8px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-surface);
+}
+
+.category-accordion__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background-color: var(--bg-elevated);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.category-accordion__header:hover {
+  background-color: var(--bg-hover);
+}
+
+.category-accordion__header:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--accent-light);
+}
+
+.category-accordion__toggle {
+  font-size: 12px;
+  color: var(--text-muted);
+  width: 14px;
+  text-align: center;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.category-accordion__header:hover .category-accordion__toggle {
+  color: var(--accent);
+}
+
+.category-accordion__name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+
+.category-accordion__count {
+  font-size: 13px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.category-accordion__progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.category-accordion__progress .progress-bar {
+  width: 100px;
+}
+
+.category-accordion__progress-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  min-width: 40px;
+  text-align: right;
+}
+
+.category-accordion__content {
+  padding: 8px 12px 12px;
+  background-color: var(--bg-surface);
+}

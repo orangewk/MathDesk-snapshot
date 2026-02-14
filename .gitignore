@@ -1,0 +1,24 @@
+node_modules
+dist
+build
+.env
+*.log
+
+# Security
+serviceAccountKey.json
+*.pem
+
+# Database
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE
+.vscode
+.idea

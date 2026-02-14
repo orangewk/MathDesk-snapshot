@@ -1,0 +1,268 @@
+/* ==========================================
+   EvaluationDisplay - 評価結果表示
+   ========================================== */
+
+.evaluation-display {
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+}
+
+.evaluation-display--correct {
+  background-color: rgba(74, 222, 128, 0.08);
+  border-color: rgba(74, 222, 128, 0.3);
+}
+
+.evaluation-display--incorrect {
+  background-color: rgba(248, 113, 113, 0.08);
+  border-color: rgba(248, 113, 113, 0.3);
+}
+
+/* ヘッダー */
+.evaluation-display__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.evaluation-display__verdict {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.evaluation-display__verdict--correct {
+  color: var(--success);
+}
+
+.evaluation-display__verdict--incorrect {
+  color: var(--error);
+}
+
+.evaluation-display__verdict--indeterminate {
+  color: var(--warning);
+}
+
+.evaluation-display__rankup {
+  padding: 3px 10px;
+  background-color: rgba(251, 191, 36, 0.15);
+  color: var(--warning);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  animation: rankup-pulse 0.6s ease-in-out;
+}
+
+@keyframes rankup-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* 判定不能 */
+.evaluation-display__indeterminate {
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  background-color: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  color: var(--warning);
+  line-height: 1.5;
+}
+
+/* フィードバック */
+.evaluation-display__feedback {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-primary);
+}
+
+/* テクニック情報 */
+.evaluation-display__technique {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+.evaluation-display__technique--new {
+  border-color: rgba(20, 184, 166, 0.4);
+  background-color: rgba(20, 184, 166, 0.06);
+  animation: technique-discover 0.5s ease-out;
+}
+
+@keyframes technique-discover {
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.evaluation-display__technique-header {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.evaluation-display__technique-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.evaluation-display__technique-name .math-text,
+.evaluation-display__technique-value .math-text {
+  font-size: inherit;
+}
+
+.evaluation-display__technique-name .markdown-content p,
+.evaluation-display__technique-value .markdown-content p {
+  margin: 0;
+}
+
+.evaluation-display__technique-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.evaluation-display__technique-row {
+  display: flex;
+  gap: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.evaluation-display__technique-label {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  min-width: 60px;
+}
+
+.evaluation-display__technique-value {
+  color: var(--text-secondary);
+}
+
+/* チェックポイント */
+.evaluation-display__checkpoints {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.evaluation-display__checkpoint {
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.evaluation-display__checkpoint--matched {
+  background-color: rgba(74, 222, 128, 0.1);
+  color: var(--success);
+}
+
+.evaluation-display__checkpoint--matched::before {
+  content: "\2713 ";
+}
+
+.evaluation-display__checkpoint--missed {
+  background-color: rgba(248, 113, 113, 0.1);
+  color: var(--error);
+}
+
+.evaluation-display__checkpoint--missed::before {
+  content: "\2717 ";
+}
+
+/* 解法 */
+.evaluation-display__solution {
+  margin-top: 16px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.evaluation-display__solution summary {
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.evaluation-display__solution summary:hover {
+  color: var(--accent);
+}
+
+.evaluation-display__solution-content {
+  margin-top: 12px;
+}
+
+.evaluation-display__answer {
+  padding: 8px 12px;
+  background-color: var(--bg-elevated);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.evaluation-display__steps {
+  padding-left: 20px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.evaluation-display__steps li {
+  margin-bottom: 6px;
+}
+
+/* 復習おすすめ */
+.evaluation-display__review {
+  margin-top: 16px;
+  padding: 12px;
+  background-color: rgba(251, 191, 36, 0.06);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  border-radius: var(--radius-md);
+}
+
+.evaluation-display__review-header {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--warning);
+  margin-bottom: 6px;
+}
+
+.evaluation-display__review-analysis {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0 0 10px;
+}
+
+.evaluation-display__review-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.evaluation-display__review-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  background: rgba(20, 184, 166, 0.1);
+  color: var(--accent);
+  border: 1px solid rgba(20, 184, 166, 0.3);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.evaluation-display__review-button:hover {
+  background: rgba(20, 184, 166, 0.2);
+  border-color: var(--accent);
+}

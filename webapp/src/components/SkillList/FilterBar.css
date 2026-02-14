@@ -1,0 +1,183 @@
+/**
+ * フィルターバースタイル
+ * ティールダークテーマ
+ */
+
+.filter-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background-color: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+}
+
+.filter-bar__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+/* ========================================
+   Search
+   ======================================== */
+.filter-bar__search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 200px;
+  max-width: 400px;
+  background-color: var(--bg-elevated);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  transition: border-color 0.2s;
+}
+
+.filter-bar__search:focus-within {
+  border-color: var(--accent);
+}
+
+.filter-bar__search-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+  color: var(--text-muted);
+}
+
+.filter-bar__search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  outline: none;
+  color: var(--text-primary);
+}
+
+.filter-bar__search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.filter-bar__search-clear {
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 2px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.filter-bar__search-clear:hover {
+  color: var(--text-primary);
+}
+
+/* ========================================
+   Filter
+   ======================================== */
+.filter-bar__filter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-bar__filter-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.filter-bar__select {
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.filter-bar__select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-light);
+}
+
+.filter-bar__select:hover {
+  border-color: var(--accent);
+}
+
+/* ========================================
+   Progress Summary
+   ======================================== */
+.filter-bar__summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-color);
+}
+
+.filter-bar__progress-info {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.filter-bar__progress-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.filter-bar__progress-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.filter-bar__progress-bar {
+  flex: 1;
+  max-width: 200px;
+}
+
+.filter-bar__stats {
+  font-size: 13px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.filter-bar__scope-note {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+/* ========================================
+   Responsive
+   ======================================== */
+@media (max-width: 600px) {
+  .filter-bar__row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-bar__search {
+    max-width: none;
+  }
+
+  .filter-bar__summary {
+    flex-wrap: wrap;
+  }
+
+  .filter-bar__progress-bar {
+    order: 3;
+    flex-basis: 100%;
+    max-width: none;
+  }
+}

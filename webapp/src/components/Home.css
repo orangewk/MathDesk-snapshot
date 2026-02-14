@@ -1,0 +1,522 @@
+/**
+ * ホーム画面スタイル
+ * 2カラムレスポンシブレイアウト
+ */
+
+/* ========================================
+   Container - 2-column grid (wide) / stack (narrow)
+   ======================================== */
+.home {
+  height: 100%;
+  padding: 16px 20px;
+  box-sizing: border-box;
+  background-color: var(--bg-base);
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 16px;
+}
+
+/* ========================================
+   Left Column: Actions
+   ======================================== */
+.home-actions-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ========================================
+   Guide Speech Bubble
+   ======================================== */
+.home-guide {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.home-guide-avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top center;
+  flex-shrink: 0;
+  border: 2px solid var(--border-color);
+}
+
+.home-guide-bubble {
+  position: relative;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  font-size: 0.8125rem;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.home-guide-bubble::before {
+  content: '';
+  position: absolute;
+  left: -7px;
+  top: 14px;
+  width: 12px;
+  height: 12px;
+  background: var(--bg-surface);
+  border-left: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  transform: rotate(45deg);
+}
+
+/* ========================================
+   Action Buttons
+   ======================================== */
+.home-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.home-action-button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.home-action-button.primary {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+  box-shadow: 0 2px 8px rgba(20, 184, 166, 0.3);
+}
+
+.home-action-button.primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(20, 184, 166, 0.4);
+}
+
+.home-action-button.secondary {
+  background: var(--bg-surface);
+  color: var(--accent);
+  border-color: var(--accent);
+  font-weight: 600;
+}
+
+.home-action-button.secondary:hover {
+  background: rgba(20, 184, 166, 0.08);
+  border-color: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.action-icon {
+  font-size: 1rem;
+}
+
+/* ========================================
+   Featured Action (この問題を教えて)
+   ======================================== */
+.home-featured-action {
+  display: flex;
+  flex-direction: column;
+}
+
+.home-action-button.featured {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(20, 184, 166, 0.3);
+}
+
+.home-action-button.featured:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(20, 184, 166, 0.4);
+}
+
+.home-action-button.featured:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.home-action-button.featured .action-icon {
+  font-size: 1.125rem;
+}
+
+.featured-hint {
+  margin: 4px 0 0;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.image-error-message {
+  margin-top: 6px;
+  padding: 6px 12px;
+  background: rgba(248, 113, 113, 0.2);
+  color: var(--error);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+}
+
+/* 非表示のファイルinput */
+.file-input-hidden {
+  display: none;
+}
+
+/* ========================================
+   Right Column: Conversations
+   ======================================== */
+.conversations-section {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.conversations-section h2 {
+  margin: 0;
+  padding: 10px 14px;
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  color: var(--text-primary);
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-elevated);
+}
+
+/* ========================================
+   Loading / Error / Empty States
+   ======================================== */
+.conversations-loading,
+.conversations-error,
+.conversations-empty {
+  text-align: center;
+  padding: 32px 16px;
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+}
+
+.conversations-error button {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.conversations-error button:hover {
+  background: var(--accent-hover);
+}
+
+.conversations-empty-hint {
+  font-size: 0.75rem;
+  margin-top: 4px;
+  color: var(--text-muted);
+}
+
+/* ========================================
+   Conversation List
+   ======================================== */
+.conversations-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.conversation-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.conversation-item:last-child {
+  border-bottom: none;
+}
+
+.conversation-item:hover {
+  background-color: var(--bg-elevated);
+}
+
+.conversation-item.deleting {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* スキル学習会話 */
+.conversation-item.skill-learning {
+  background: var(--accent-light);
+  border-left: 3px solid var(--accent);
+}
+
+.conversation-item.skill-learning:hover {
+  background: rgba(20, 184, 166, 0.2);
+}
+
+/* ========================================
+   Conversation Content
+   ======================================== */
+.conversation-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.conversation-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.conversation-title {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.conversation-badge {
+  flex-shrink: 0;
+  font-size: 0.625rem;
+  padding: 1px 6px;
+  background: var(--accent);
+  color: white;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.conversation-badge.completed-badge {
+  background: var(--text-muted);
+  color: white;
+}
+
+.conversation-item.completed {
+  background: var(--bg-surface);
+  border-left: 3px solid var(--text-muted);
+  cursor: default;
+}
+
+.conversation-item.completed:hover {
+  background: var(--bg-surface);
+}
+
+.conversation-preview {
+  margin: 2px 0;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+}
+
+.conversation-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ========================================
+   Delete Button
+   ======================================== */
+.conversation-delete {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  opacity: 0.4;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 4px;
+}
+
+.conversation-delete:hover {
+  opacity: 1;
+  background: rgba(248, 113, 113, 0.2);
+  color: var(--error);
+}
+
+.conversation-delete:disabled {
+  cursor: not-allowed;
+}
+
+/* ========================================
+   Guide Speech (ツダ先生の発話エリア)
+   ======================================== */
+.guide-speech {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-elevated);
+}
+
+.guide-speech--loading {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-elevated);
+}
+
+.guide-speech__bubble {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+}
+
+.guide-speech__bubble::before {
+  content: '';
+  position: absolute;
+  left: -7px;
+  top: 12px;
+  width: 10px;
+  height: 10px;
+  background: var(--bg-surface);
+  border-left: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  transform: rotate(45deg);
+}
+
+.guide-speech__loading {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.guide-speech__greeting {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 6px;
+}
+
+.guide-speech__text {
+  font-size: 0.8125rem;
+  color: var(--text-primary);
+  line-height: 1.5;
+  margin: 0 0 8px;
+}
+
+.guide-speech__text:last-child {
+  margin-bottom: 0;
+}
+
+.guide-speech__skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.advisor-skill-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.advisor-skill-chip--continue {
+  background: rgba(20, 184, 166, 0.15);
+  color: var(--accent);
+  border-color: rgba(20, 184, 166, 0.3);
+}
+
+.advisor-skill-chip--continue:hover {
+  background: rgba(20, 184, 166, 0.25);
+}
+
+.advisor-skill-chip--new {
+  background: rgba(96, 165, 250, 0.15);
+  color: var(--info);
+  border-color: rgba(96, 165, 250, 0.3);
+}
+
+.advisor-skill-chip--new:hover {
+  background: rgba(96, 165, 250, 0.25);
+}
+
+.advisor-skill-chip--review {
+  background: rgba(251, 191, 36, 0.15);
+  color: var(--warning);
+  border-color: rgba(251, 191, 36, 0.3);
+}
+
+.advisor-skill-chip--review:hover {
+  background: rgba(251, 191, 36, 0.25);
+}
+
+.advisor-skill-chip__icon {
+  font-size: 0.625rem;
+}
+
+/* ========================================
+   Responsive - narrow screens
+   ======================================== */
+@media (max-width: 700px) {
+  .home {
+    grid-template-columns: 1fr;
+    padding: 12px 16px;
+    gap: 12px;
+  }
+
+  .conversations-section {
+    max-height: 60vh;
+  }
+}
