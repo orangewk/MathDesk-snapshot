@@ -39,8 +39,9 @@
   <canvas id="c"></canvas>
   <div id="info">
     <h2>踏破チャート: 因数分解・展開</h2>
-    <p>星の大きさ = 概念の重要度（信頼度スコア）</p>
+    <p>星の大きさ = この概念を知らないと先に進めない数（暫定）</p>
     <p>星の明るさ = あなたの獲得度</p>
+    <p>星のくっきりさ = 観測確度（何度も確認された星ほどくっきり）</p>
     <p>配置 = 前提が外側、目標が中央</p>
     <div class="legend">
       <div class="legend-item"><div class="legend-dot" style="background:#4ae8c4;box-shadow:0 0 6px #4ae8c4"></div>踏破済み</div>
@@ -116,6 +117,30 @@
 
     // Apply states
     Object.keys(nodeMap).forEach(id => { nodeMap[id].state = getNodeState(id); });
+
+    // ── Compute reachable count (proxy for learning importance) ──
+    function computeReachable() {
+      Object.keys(nodeMap).forEach(startId => {
+        const visited = new Set();
+        const queue = [startId];
+        while (queue.length > 0) {
+          const cur = queue.shift();
+          (outEdges[cur] || []).forEach(next => {
+            if (!visited.has(next)) {
+              visited.add(next);
+              queue.push(next);
+            }
+          });
+        }
+        nodeMap[startId].reachable = visited.size; // excludes self
+      });
+      // Normalize to 0-1
+      const maxR = Math.max(...Object.values(nodeMap).map(n => n.reachable), 1);
+      Object.values(nodeMap).forEach(n => {
+        n.importance = n.reachable / maxR;
+      });
+    }
+    computeReachable();
 
     // ── Layout: concentric rings by topological depth ──
     // BFS from roots (no incoming edges, or only from confident)
@@ -357,31 +382,44 @@
       // Draw nodes
       const nodes = Object.values(nodeMap);
       nodes.forEach(n => {
-        const radius = 8 + n.score * 16;
+        // Size = importance (reachable count), not consensus
+        const radius = 8 + n.importance * 18;
         const color = stateColor(n.state, n.value);
         const glow = glowColor(n.state);
+        // Consensus (score) → sharpness: high score = crisp, low score = blurry
+        const consensusBlur = (1 - n.score) * 6; // 0 for score=1, 6 for score=0
 
         ctx.save();
 
-        // Glow
+        // Glow (state-based) + consensus blur
         if (n.state === 'confident' || n.state === 'obstacle' || n.state === 'frontier') {
           ctx.shadowColor = glow;
-          ctx.shadowBlur = n.state === 'confident' ? 12 + n.value * 10 : 8;
+          ctx.shadowBlur = (n.state === 'confident' ? 12 + n.value * 10 : 8) + consensusBlur;
+        } else {
+          // Even non-glowing nodes get consensus blur
+          if (consensusBlur > 0) {
+            ctx.shadowColor = 'rgba(160, 160, 180, 0.4)';
+            ctx.shadowBlur = consensusBlur * 2;
+          }
         }
 
         // Node circle
+        // Low consensus → lower opacity (fuzzier existence)
+        const consensusAlpha = 0.5 + n.score * 0.5; // 0.5 at score=0, 1.0 at score=1
         if (n.state === 'unknown') {
-          // Unknown: gray outline only — silhouette in the fog
-          ctx.strokeStyle = 'rgba(160, 160, 180, 0.45)';
+          // Unknown: gray outline — silhouette in the fog
+          ctx.strokeStyle = `rgba(160, 160, 180, ${0.25 + n.score * 0.3})`;
           ctx.lineWidth = 1.5;
           ctx.beginPath();
           ctx.arc(n.x, n.y, radius, 0, Math.PI * 2);
           ctx.stroke();
         } else {
+          ctx.globalAlpha = consensusAlpha;
           ctx.fillStyle = color;
           ctx.beginPath();
           ctx.arc(n.x, n.y, radius, 0, Math.PI * 2);
           ctx.fill();
+          ctx.globalAlpha = 1;
         }
 
         // Frontier ring
@@ -456,7 +494,7 @@
       let hit = null;
       for (const n of Object.values(nodeMap)) {
         const dx = mx - n.x, dy = my - n.y;
-        const r = 8 + n.score * 16;
+        const r = 8 + n.importance * 18;
         if (dx * dx + dy * dy < (r + 4) * (r + 4)) { hit = n; break; }
       }
       if (hit) {
@@ -467,7 +505,7 @@
         tooltip.style.top = (my - 10) + 'px';
         tooltip.innerHTML =
           `<div class="tt-label">${hit.label}</div>` +
-          `<div class="tt-value">獲得度: ${Math.round(hit.value * 100)}% / 重要度: ${hit.score}</div>` +
+          `<div class="tt-value">獲得度: ${Math.round(hit.value * 100)}% / 観測確度: ${hit.score} / 到達先: ${hit.reachable}概念</div>` +
           `<div class="tt-state" style="color:${glowColor(hit.state)}">${stateLabel(hit.state)}</div>` +
           (prereqs.length > 0 ? `<div style="margin-top:4px;font-size:11px;color:#888">前提: ${prereqs.join(', ')}</div>` : '') +
           (successors.length > 0 ? `<div style="font-size:11px;color:#888">次: ${successors.join(', ')}</div>` : '');
