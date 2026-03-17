@@ -40,17 +40,18 @@
   <div id="info">
     <h2>踏破チャート: 因数分解・展開</h2>
     <p>星の大きさ = この概念を知らないと先に進めない数（暫定）</p>
-    <p>星の明るさ = あなたの習得度</p>
+    <p>星の色 = あなたの習得度（灰→赤→黄→シアン）</p>
     <p>星のくっきりさ = 観測確度（何度も確認された星ほどくっきり）</p>
     <p>星の下の % = あなたの習得度（数値）</p>
     <p>配置 = 前提が外側、目標が中央</p>
     <p>星にマウスを乗せると詳細が見られます</p>
     <div class="legend">
-      <div class="legend-item"><div class="legend-dot" style="background:#4ae8c4;box-shadow:0 0 6px #4ae8c4"></div>踏破済み</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#f5a623"></div>あいまい</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#555"></div>未踏</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#4ae8c4;border:2px solid #7fff7f"></div>フリンジ</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#e74c3c;box-shadow:0 0 6px #e74c3c"></div>障害</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#4ae8c4;box-shadow:0 0 6px #4ae8c4"></div>踏破済み (80%+)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#e6d23c"></div>あと少し</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#e69632"></div>途上</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#c84638"></div>つまずき</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#555;border:1px solid #999"></div>未踏</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#7fff7f;border:2px solid #7fff7f"></div>フリンジ</div>
     </div>
   </div>
   <div id="tooltip"></div>
@@ -274,24 +275,56 @@
     relax(400);
 
     // ── Color helpers ──
-    function stateColor(state, value) {
-      switch (state) {
-        case 'confident': return `rgba(74, 232, 196, ${0.6 + value * 0.4})`;
-        case 'obstacle':  return `rgba(231, 76, 60, ${0.5 + value * 0.5})`;
-        case 'fuzzy':     return `rgba(245, 166, 35, ${0.3 + value * 0.5})`;
-        case 'frontier':  return 'rgba(127, 255, 127, 0.7)';
-        default:          return 'transparent'; // unknown: outline only
-      }
+    // Mastery → color hue (gray → red → orange → yellow → cyan)
+    function masteryColor(value) {
+      if (value <= 0)   return { r: 100, g: 100, b: 110 }; // gray
+      if (value < 0.25) return { r: 200, g:  70, b:  60 }; // red
+      if (value < 0.5)  return { r: 230, g: 140, b:  50 }; // orange
+      if (value < 0.8)  return { r: 230, g: 210, b:  60 }; // yellow
+      return { r:  74, g: 232, b: 196 };                    // cyan (confident)
     }
 
-    function glowColor(state) {
-      switch (state) {
-        case 'confident': return '#4ae8c4';
-        case 'obstacle':  return '#e74c3c';
-        case 'frontier':  return '#7fff7f';
-        case 'fuzzy':     return '#f5a623';
-        default:          return 'transparent';
+    function lerpColor(v, stops) {
+      // Find which segment v falls into
+      for (let i = 0; i < stops.length - 1; i++) {
+        const [t0, c0] = stops[i];
+        const [t1, c1] = stops[i + 1];
+        if (v >= t0 && v <= t1) {
+          const t = (v - t0) / (t1 - t0);
+          return {
+            r: Math.round(c0.r + (c1.r - c0.r) * t),
+            g: Math.round(c0.g + (c1.g - c0.g) * t),
+            b: Math.round(c0.b + (c1.b - c0.b) * t),
+          };
+        }
       }
+      return stops[stops.length - 1][1];
+    }
+
+    const colorStops = [
+      [0.0,  { r: 100, g: 100, b: 110 }], // gray
+      [0.15, { r: 200, g:  70, b:  60 }], // red
+      [0.4,  { r: 230, g: 150, b:  50 }], // orange
+      [0.65, { r: 230, g: 210, b:  60 }], // yellow
+      [0.8,  { r:  74, g: 232, b: 196 }], // cyan
+      [1.0,  { r:  74, g: 232, b: 196 }], // cyan (stay)
+    ];
+
+    function stateColor(state, value) {
+      if (state === 'unknown') return 'transparent';
+      if (state === 'frontier') {
+        // Frontier: green tint
+        return 'rgba(127, 255, 127, 0.85)';
+      }
+      const c = lerpColor(value, colorStops);
+      return `rgb(${c.r}, ${c.g}, ${c.b})`;
+    }
+
+    function glowColor(state, value) {
+      if (state === 'frontier') return '#7fff7f';
+      if (state === 'unknown') return 'transparent';
+      const c = lerpColor(value || 0, colorStops);
+      return `rgb(${c.r}, ${c.g}, ${c.b})`;
     }
 
     function stateLabel(state) {
@@ -387,27 +420,19 @@
         // Size = importance (reachable count), not consensus
         const radius = 14 + n.importance * 12;
         const color = stateColor(n.state, n.value);
-        const glow = glowColor(n.state);
-        // Consensus (score) → sharpness: high score = crisp, low score = blurry
-        const consensusBlur = (1 - n.score) * 16; // 0 for score=1, 16 for score=0
+        const glow = glowColor(n.state, n.value);
+        // Consensus (score) → blur only (no alpha — color handles mastery)
+        const consensusBlur = (1 - n.score) * 18;
 
         ctx.save();
 
-        // Glow (state-based) + consensus blur
-        if (n.state === 'confident' || n.state === 'obstacle' || n.state === 'frontier') {
+        // Glow: color from mastery, blur spread from consensus
+        if (n.state !== 'unknown') {
           ctx.shadowColor = glow;
-          ctx.shadowBlur = (n.state === 'confident' ? 12 + n.value * 10 : 8) + consensusBlur;
-        } else {
-          // Even non-glowing nodes get consensus blur
-          if (consensusBlur > 0) {
-            ctx.shadowColor = 'rgba(160, 160, 180, 0.6)';
-            ctx.shadowBlur = consensusBlur * 3;
-          }
+          ctx.shadowBlur = 10 + consensusBlur;
         }
 
         // Node circle
-        // Low consensus → lower opacity (fuzzier existence)
-        const consensusAlpha = 0.3 + n.score * 0.7; // 0.3 at score=0, 1.0 at score=1
         if (n.state === 'unknown') {
           // Unknown: gray outline — silhouette in the fog
           ctx.strokeStyle = `rgba(160, 160, 180, ${0.25 + n.score * 0.3})`;
@@ -416,12 +441,10 @@
           ctx.arc(n.x, n.y, radius, 0, Math.PI * 2);
           ctx.stroke();
         } else {
-          ctx.globalAlpha = consensusAlpha;
           ctx.fillStyle = color;
           ctx.beginPath();
           ctx.arc(n.x, n.y, radius, 0, Math.PI * 2);
           ctx.fill();
-          ctx.globalAlpha = 1;
         }
 
         // Frontier ring
@@ -435,21 +458,6 @@
         }
 
         ctx.restore();
-
-        // Value indicator (inner brightness fill)
-        if (n.value > 0 && n.state !== 'confident') {
-          ctx.save();
-          ctx.globalAlpha = 0.3;
-          ctx.fillStyle = '#4ae8c4';
-          ctx.beginPath();
-          // Partial fill arc from bottom, proportional to value
-          const fillAngle = n.value * Math.PI * 2;
-          ctx.moveTo(n.x, n.y);
-          ctx.arc(n.x, n.y, radius * 0.7, -Math.PI / 2, -Math.PI / 2 + fillAngle);
-          ctx.closePath();
-          ctx.fill();
-          ctx.restore();
-        }
 
         // Label
         const labelAlpha = n.state === 'confident' ? 0.95
@@ -508,7 +516,7 @@
         tooltip.innerHTML =
           `<div class="tt-label">${hit.label}</div>` +
           `<div class="tt-value">習得度: ${Math.round(hit.value * 100)}% / 観測確度: ${hit.score} / 到達先: ${hit.reachable}概念</div>` +
-          `<div class="tt-state" style="color:${glowColor(hit.state)}">${stateLabel(hit.state)}</div>` +
+          `<div class="tt-state" style="color:${glowColor(hit.state, hit.value)}">${stateLabel(hit.state)}</div>` +
           (prereqs.length > 0 ? `<div style="margin-top:4px;font-size:11px;color:#888">前提: ${prereqs.join(', ')}</div>` : '') +
           (successors.length > 0 ? `<div style="font-size:11px;color:#888">次: ${successors.join(', ')}</div>` : '');
       } else {
