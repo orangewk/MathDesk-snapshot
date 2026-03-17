@@ -300,14 +300,15 @@
       ctx.stroke();
       ctx.setLineDash([]);
 
-      // Arrowhead
-      const headLen = 8;
+      // Arrowhead — larger and wider for visibility
+      const headLen = 14;
+      const headAngle = 0.45;
       const angle = Math.atan2(ey - sy, ex - sx);
       ctx.fillStyle = color;
       ctx.beginPath();
       ctx.moveTo(ex, ey);
-      ctx.lineTo(ex - headLen * Math.cos(angle - 0.35), ey - headLen * Math.sin(angle - 0.35));
-      ctx.lineTo(ex - headLen * Math.cos(angle + 0.35), ey - headLen * Math.sin(angle + 0.35));
+      ctx.lineTo(ex - headLen * Math.cos(angle - headAngle), ey - headLen * Math.sin(angle - headAngle));
+      ctx.lineTo(ex - headLen * Math.cos(angle + headAngle), ey - headLen * Math.sin(angle + headAngle));
       ctx.closePath();
       ctx.fill();
       ctx.restore();
