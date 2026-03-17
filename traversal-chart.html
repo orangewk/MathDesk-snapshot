@@ -40,9 +40,9 @@
   <div id="info">
     <h2>踏破チャート: 因数分解・展開</h2>
     <p>星の大きさ = この概念を知らないと先に進めない数（暫定）</p>
-    <p>星の明るさ = あなたの獲得度</p>
+    <p>星の明るさ = あなたの習得度</p>
     <p>星のくっきりさ = 観測確度（何度も確認された星ほどくっきり）</p>
-    <p>星の下の % = あなたの獲得度（数値）</p>
+    <p>星の下の % = あなたの習得度（数値）</p>
     <p>配置 = 前提が外側、目標が中央</p>
     <p>星にマウスを乗せると詳細が見られます</p>
     <div class="legend">
@@ -507,7 +507,7 @@
         tooltip.style.top = (my - 10) + 'px';
         tooltip.innerHTML =
           `<div class="tt-label">${hit.label}</div>` +
-          `<div class="tt-value">獲得度: ${Math.round(hit.value * 100)}% / 観測確度: ${hit.score} / 到達先: ${hit.reachable}概念</div>` +
+          `<div class="tt-value">習得度: ${Math.round(hit.value * 100)}% / 観測確度: ${hit.score} / 到達先: ${hit.reachable}概念</div>` +
           `<div class="tt-state" style="color:${glowColor(hit.state)}">${stateLabel(hit.state)}</div>` +
           (prereqs.length > 0 ? `<div style="margin-top:4px;font-size:11px;color:#888">前提: ${prereqs.join(', ')}</div>` : '') +
           (successors.length > 0 ? `<div style="font-size:11px;color:#888">次: ${successors.join(', ')}</div>` : '');
