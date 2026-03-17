@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>踏破チャート — 因数分解・展開</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #0a0a1a; color: #eee; font-family: 'Segoe UI', sans-serif; overflow: hidden; }
+    canvas { display: block; }
+    #info {
+      position: absolute; top: 12px; left: 12px;
+      background: rgba(0,0,0,0.75); padding: 16px; border-radius: 10px;
+      max-width: 320px; font-size: 13px; line-height: 1.6;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    #info h2 { font-size: 15px; margin-bottom: 6px; color: #7ecfff; }
+    #info p { margin: 2px 0; color: #aaa; }
+    .legend { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px 14px; }
+    .legend-item { display: flex; align-items: center; gap: 5px; font-size: 12px; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    #tooltip {
+      position: absolute; display: none; pointer-events: none;
+      background: rgba(10,10,30,0.92); border: 1px solid rgba(120,207,255,0.3);
+      padding: 10px 14px; border-radius: 8px; font-size: 13px; line-height: 1.5;
+      max-width: 260px;
+    }
+    #tooltip .tt-label { font-weight: bold; color: #7ecfff; }
+    #tooltip .tt-value { color: #ccc; }
+    #tooltip .tt-state { margin-top: 4px; font-size: 12px; }
+    #stats {
+      position: absolute; bottom: 12px; left: 12px;
+      background: rgba(0,0,0,0.75); padding: 12px 16px; border-radius: 10px;
+      font-size: 12px; border: 1px solid rgba(255,255,255,0.08);
+    }
+    #stats span { margin-right: 16px; }
+  </style>
+</head>
+<body>
+  <canvas id="c"></canvas>
+  <div id="info">
+    <h2>踏破チャート: 因数分解・展開</h2>
+    <p>星の大きさ = 概念の重要度（信頼度スコア）</p>
+    <p>星の明るさ = あなたの獲得度</p>
+    <p>配置 = 前提が外側、目標が中央</p>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#4ae8c4;box-shadow:0 0 6px #4ae8c4"></div>踏破済み</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#f5a623"></div>あいまい</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#555"></div>未踏</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#4ae8c4;border:2px solid #7fff7f"></div>フリンジ</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#e74c3c;box-shadow:0 0 6px #e74c3c"></div>障害</div>
+    </div>
+  </div>
+  <div id="tooltip"></div>
+  <div id="stats"></div>
+
+  <script>
+    // ── Data ──
+    const graphData = {"totalRuns":5,"nodes":[{"id":"negative_numbers","label":"負の数","score":1,"count":5},{"id":"order_of_operations","label":"計算の順序","score":1,"count":5},{"id":"exponentiation","label":"累乗","score":1,"count":5},{"id":"variables","label":"文字式","score":1,"count":5},{"id":"like_terms","label":"同類項","score":1,"count":5},{"id":"distributive_law","label":"分配法則","score":1,"count":5},{"id":"polynomial_multiplication","label":"多項式の乗法","score":1,"count":5},{"id":"expansion","label":"展開（一般）","score":1,"count":5},{"id":"product_of_sum_and_difference","label":"和と差の積","score":1,"count":5},{"id":"factoring_by_grouping","label":"因数分解（組み合わせ）","score":1,"count":5},{"id":"product_of_binomials","label":"二項の積 (x+a)(x+b)","score":0.8,"count":4},{"id":"prime_factorization","label":"素因数分解","score":0.8,"count":4},{"id":"factoring_difference_of_squares","label":"因数分解 a²−b²","score":0.8,"count":4},{"id":"four_operations","label":"四則演算","score":0.6,"count":3},{"id":"coefficients_and_terms","label":"係数と項","score":0.6,"count":3},{"id":"monomial_multiplication","label":"単項式の乗法","score":0.6,"count":3},{"id":"square_formulas","label":"平方公式 (a±b)²","score":0.6,"count":3},{"id":"factoring_perfect_square","label":"因数分解 a²±2ab+b²","score":0.6,"count":3},{"id":"factoring_quadratic_simple","label":"因数分解 x²+(a+b)x+ab","score":0.6,"count":3},{"id":"substitution","label":"置き換え（代入）","score":0.6,"count":3},{"id":"polynomial_addition","label":"多項式の加減","score":0.4,"count":2},{"id":"product_of_general_binomials","label":"一般の二項積","score":0.4,"count":2},{"id":"common_factor","label":"共通因数くくり出し","score":0.4,"count":2},{"id":"factoring_quadratic_general","label":"たすきがけ","score":0.4,"count":2},{"id":"linear_expressions","label":"一次式の計算","score":0.4,"count":2},{"id":"fractions","label":"分数の計算","score":0.4,"count":2}],"edges":[{"from":"negative_numbers","to":"variables","score":1,"count":5},{"from":"distributive_law","to":"polynomial_multiplication","score":1,"count":5},{"from":"polynomial_multiplication","to":"expansion","score":1,"count":5},{"from":"expansion","to":"product_of_sum_and_difference","score":1,"count":5},{"from":"variables","to":"distributive_law","score":0.8,"count":4},{"from":"expansion","to":"product_of_binomials","score":0.8,"count":4},{"from":"product_of_sum_and_difference","to":"factoring_difference_of_squares","score":0.8,"count":4},{"from":"order_of_operations","to":"variables","score":0.8,"count":4},{"from":"four_operations","to":"negative_numbers","score":0.6,"count":3},{"from":"four_operations","to":"order_of_operations","score":0.6,"count":3},{"from":"variables","to":"coefficients_and_terms","score":0.6,"count":3},{"from":"exponentiation","to":"monomial_multiplication","score":0.6,"count":3},{"from":"coefficients_and_terms","to":"like_terms","score":0.6,"count":3},{"from":"monomial_multiplication","to":"polynomial_multiplication","score":0.6,"count":3},{"from":"expansion","to":"square_formulas","score":0.6,"count":3},{"from":"square_formulas","to":"factoring_perfect_square","score":0.6,"count":3},{"from":"factoring_difference_of_squares","to":"factoring_by_grouping","score":0.6,"count":3},{"from":"factoring_quadratic_simple","to":"factoring_by_grouping","score":0.6,"count":3},{"from":"variables","to":"substitution","score":0.6,"count":3},{"from":"four_operations","to":"exponentiation","score":0.4,"count":2},{"from":"coefficients_and_terms","to":"monomial_multiplication","score":0.4,"count":2},{"from":"like_terms","to":"polynomial_addition","score":0.4,"count":2},{"from":"polynomial_addition","to":"polynomial_multiplication","score":0.4,"count":2},{"from":"product_of_binomials","to":"product_of_general_binomials","score":0.4,"count":2},{"from":"prime_factorization","to":"common_factor","score":0.4,"count":2},{"from":"common_factor","to":"factoring_difference_of_squares","score":0.4,"count":2},{"from":"product_of_binomials","to":"factoring_quadratic_simple","score":0.4,"count":2},{"from":"factoring_quadratic_simple","to":"factoring_quadratic_general","score":0.4,"count":2},{"from":"product_of_general_binomials","to":"factoring_quadratic_general","score":0.4,"count":2},{"from":"factoring_perfect_square","to":"factoring_by_grouping","score":0.4,"count":2},{"from":"four_operations","to":"fractions","score":0.4,"count":2},{"from":"exponentiation","to":"variables","score":0.4,"count":2},{"from":"order_of_operations","to":"distributive_law","score":0.4,"count":2},{"from":"like_terms","to":"linear_expressions","score":0.4,"count":2},{"from":"distributive_law","to":"linear_expressions","score":0.4,"count":2},{"from":"four_operations","to":"prime_factorization","score":0.4,"count":2},{"from":"distributive_law","to":"common_factor","score":0.4,"count":2},{"from":"common_factor","to":"factoring_perfect_square","score":0.4,"count":2},{"from":"common_factor","to":"factoring_quadratic_simple","score":0.4,"count":2},{"from":"common_factor","to":"factoring_by_grouping","score":0.4,"count":2}]};
+
+    const karteData = {"negative_numbers":{"value":0.85,"lastObserved":"2026-03-16T16:19:50.588Z","observationCount":1},"order_of_operations":{"value":0.85,"lastObserved":"2026-03-16T16:20:11.032Z","observationCount":1},"exponentiation":{"value":0.85,"lastObserved":"2026-03-16T16:20:30.233Z","observationCount":1},"variables":{"value":0.85,"lastObserved":"2026-03-16T16:25:35.478Z","observationCount":1},"like_terms":{"value":0.85,"lastObserved":"2026-03-16T16:25:53.314Z","observationCount":1},"distributive_law":{"value":0.85,"lastObserved":"2026-03-16T16:25:59.119Z","observationCount":1},"polynomial_multiplication":{"value":0.85,"lastObserved":"2026-03-16T16:26:24.026Z","observationCount":1},"expansion":{"value":0.85,"lastObserved":"2026-03-16T16:26:30.008Z","observationCount":1},"product_of_sum_and_difference":{"value":0.85,"lastObserved":"2026-03-16T16:26:34.548Z","observationCount":1},"factoring_by_grouping":{"value":0.1,"lastObserved":"2026-03-16T16:27:25.169Z","observationCount":1},"product_of_binomials":{"value":0.85,"lastObserved":"2026-03-16T16:26:50.284Z","observationCount":1},"prime_factorization":{"value":0.17603200000000002,"lastObserved":"2026-03-16T16:25:20.061Z","observationCount":8},"factoring_difference_of_squares":{"value":0.1,"lastObserved":"2026-03-16T16:27:08.068Z","observationCount":1},"four_operations":{"value":0.85,"lastObserved":"2026-03-16T16:19:34.095Z","observationCount":1},"coefficients_and_terms":{"value":0.85,"lastObserved":"2026-03-16T16:25:41.432Z","observationCount":1},"monomial_multiplication":{"value":0.85,"lastObserved":"2026-03-16T16:26:05.576Z","observationCount":1},"square_formulas":{"value":0.85,"lastObserved":"2026-03-16T16:26:44.861Z","observationCount":1},"factoring_perfect_square":{"value":0.1,"lastObserved":"2026-03-16T16:27:12.442Z","observationCount":1},"factoring_quadratic_simple":{"value":0.1,"lastObserved":"2026-03-16T16:27:17.183Z","observationCount":1},"substitution":{"value":0.85,"lastObserved":"2026-03-16T16:25:47.146Z","observationCount":1},"polynomial_addition":{"value":0.85,"lastObserved":"2026-03-16T16:26:11.246Z","observationCount":1},"product_of_general_binomials":{"value":0.85,"lastObserved":"2026-03-16T16:26:57.693Z","observationCount":1},"common_factor":{"value":0.1,"lastObserved":"2026-03-16T16:27:04.075Z","observationCount":1},"factoring_quadratic_general":{"value":0.1,"lastObserved":"2026-03-16T16:27:20.407Z","observationCount":1},"linear_expressions":{"value":0.85,"lastObserved":"2026-03-16T16:26:16.427Z","observationCount":1},"fractions":{"value":0.80464,"lastObserved":"2026-03-16T16:22:26.015Z","observationCount":6}};
+
+    // ── Node state computation ──
+    const CONFIDENT_THRESHOLD = 0.8;
+    const nodeMap = {};
+    const inEdges = {};   // nodeId -> [sourceId, ...]
+    const outEdges = {};  // nodeId -> [targetId, ...]
+
+    graphData.nodes.forEach(n => {
+      const k = karteData[n.id] || { value: 0, observationCount: 0 };
+      nodeMap[n.id] = { ...n, value: k.value, obsCount: k.observationCount };
+      inEdges[n.id] = [];
+      outEdges[n.id] = [];
+    });
+    graphData.edges.forEach(e => {
+      if (outEdges[e.from]) outEdges[e.from].push(e.to);
+      if (inEdges[e.to]) inEdges[e.to].push(e.from);
+    });
+
+    // Classify nodes
+    function classifyNode(id) {
+      const node = nodeMap[id];
+      if (!node) return 'unknown';
+      const v = node.value;
+      if (v >= CONFIDENT_THRESHOLD) return 'confident';
+      // Check if frontier: all prerequisites confident, self not confident
+      const prereqs = inEdges[id] || [];
+      const allPrereqConfident = prereqs.length > 0 &&
+        prereqs.every(p => (nodeMap[p]?.value ?? 0) >= CONFIDENT_THRESHOLD);
+      const isRoot = prereqs.length === 0;
+      if (v > 0 && v < CONFIDENT_THRESHOLD) {
+        // Fuzzy — check if obstacle (has downstream that could be frontier)
+        return 'obstacle';
+      }
+      if ((allPrereqConfident || isRoot) && v < CONFIDENT_THRESHOLD) return 'frontier';
+      return 'unknown';
+    }
+
+    // Refine: frontier = prereqs all confident + self not confident
+    // obstacle = fuzzy (0 < v < threshold) + observed
+    function getNodeState(id) {
+      const node = nodeMap[id];
+      if (!node) return 'unknown';
+      const v = node.value;
+      if (v >= CONFIDENT_THRESHOLD) return 'confident';
+      const prereqs = inEdges[id] || [];
+      const allPrereqConfident = prereqs.length === 0 ||
+        prereqs.every(p => (nodeMap[p]?.value ?? 0) >= CONFIDENT_THRESHOLD);
+      if (v > 0 && v < CONFIDENT_THRESHOLD && node.obsCount > 0) {
+        // Has been observed but not confident — obstacle if prereqs met, otherwise just fuzzy
+        if (allPrereqConfident) return 'obstacle';
+        return 'fuzzy';
+      }
+      if (allPrereqConfident && v < CONFIDENT_THRESHOLD) return 'frontier';
+      return 'unknown';
+    }
+
+    // Apply states
+    Object.keys(nodeMap).forEach(id => { nodeMap[id].state = getNodeState(id); });
+
+    // ── Layout: concentric rings by topological depth ──
+    // BFS from roots (no incoming edges, or only from confident)
+    function computeDepth() {
+      const depth = {};
+      const queue = [];
+      // Find roots (no incoming edges)
+      Object.keys(nodeMap).forEach(id => {
+        if (inEdges[id].length === 0) {
+          depth[id] = 0;
+          queue.push(id);
+        }
+      });
+      // BFS
+      while (queue.length > 0) {
+        const cur = queue.shift();
+        const d = depth[cur];
+        (outEdges[cur] || []).forEach(next => {
+          if (depth[next] === undefined || depth[next] < d + 1) {
+            depth[next] = d + 1;
+            queue.push(next);
+          }
+        });
+      }
+      // Any unreachable nodes get max depth
+      const maxD = Math.max(...Object.values(depth), 0);
+      Object.keys(nodeMap).forEach(id => {
+        if (depth[id] === undefined) depth[id] = maxD;
+      });
+      return depth;
+    }
+
+    const depthMap = computeDepth();
+    const maxDepth = Math.max(...Object.values(depthMap));
+
+    // ── Canvas setup ──
+    const canvas = document.getElementById('c');
+    const ctx = canvas.getContext('2d');
+    let W, H, cx, cy, scale;
+
+    function resize() {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+      cx = W / 2;
+      cy = H / 2;
+      scale = Math.min(W, H) * 0.38;
+    }
+    resize();
+    window.addEventListener('resize', () => { resize(); render(); });
+
+    // ── Position nodes on concentric rings ──
+    // Outer ring = depth 0 (roots/prerequisites), inner = max depth (targets)
+    function layoutNodes() {
+      const rings = {};
+      Object.keys(nodeMap).forEach(id => {
+        const d = depthMap[id];
+        if (!rings[d]) rings[d] = [];
+        rings[d].push(id);
+      });
+
+      Object.entries(rings).forEach(([d, ids]) => {
+        const di = parseInt(d);
+        // Invert: depth 0 → outermost ring, maxDepth → center
+        const ringRadius = di === 0 && maxDepth === 0
+          ? 0
+          : scale * (1 - di / (maxDepth + 0.5));
+        const angleStep = (2 * Math.PI) / ids.length;
+        const angleOffset = di * 0.4; // stagger rings
+        ids.forEach((id, i) => {
+          const angle = angleOffset + i * angleStep - Math.PI / 2;
+          nodeMap[id].x = cx + ringRadius * Math.cos(angle);
+          nodeMap[id].y = cy + ringRadius * Math.sin(angle);
+        });
+      });
+    }
+    layoutNodes();
+
+    // ── Simple force relaxation to reduce overlap ──
+    function relax(iterations) {
+      const nodes = Object.values(nodeMap);
+      for (let iter = 0; iter < iterations; iter++) {
+        // Repulsion between all nodes
+        for (let i = 0; i < nodes.length; i++) {
+          for (let j = i + 1; j < nodes.length; j++) {
+            const a = nodes[i], b = nodes[j];
+            let dx = b.x - a.x, dy = b.y - a.y;
+            let dist = Math.sqrt(dx * dx + dy * dy) || 1;
+            const minDist = 60;
+            if (dist < minDist) {
+              const force = (minDist - dist) / dist * 0.3;
+              const fx = dx * force, fy = dy * force;
+              a.x -= fx; a.y -= fy;
+              b.x += fx; b.y += fy;
+            }
+          }
+        }
+        // Attract along edges (gentle)
+        graphData.edges.forEach(e => {
+          const a = nodeMap[e.from], b = nodeMap[e.to];
+          if (!a || !b) return;
+          let dx = b.x - a.x, dy = b.y - a.y;
+          let dist = Math.sqrt(dx * dx + dy * dy) || 1;
+          const ideal = 100;
+          if (dist > ideal * 1.5) {
+            const force = (dist - ideal) / dist * 0.02;
+            const fx = dx * force, fy = dy * force;
+            a.x += fx; a.y += fy;
+            b.x -= fx; b.y -= fy;
+          }
+        });
+        // Gravity toward center (gentle)
+        nodes.forEach(n => {
+          const di = depthMap[n.id];
+          const targetR = scale * (1 - di / (maxDepth + 0.5));
+          const dx = n.x - cx, dy = n.y - cy;
+          const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+          const diff = dist - targetR;
+          n.x -= (dx / dist) * diff * 0.05;
+          n.y -= (dy / dist) * diff * 0.05;
+        });
+      }
+    }
+    relax(200);
+
+    // ── Color helpers ──
+    function stateColor(state, value) {
+      switch (state) {
+        case 'confident': return `rgba(74, 232, 196, ${0.6 + value * 0.4})`;
+        case 'obstacle':  return `rgba(231, 76, 60, ${0.5 + value * 0.5})`;
+        case 'fuzzy':     return `rgba(245, 166, 35, ${0.3 + value * 0.5})`;
+        case 'frontier':  return 'rgba(127, 255, 127, 0.7)';
+        default:          return 'rgba(80, 80, 100, 0.4)';
+      }
+    }
+
+    function glowColor(state) {
+      switch (state) {
+        case 'confident': return '#4ae8c4';
+        case 'obstacle':  return '#e74c3c';
+        case 'frontier':  return '#7fff7f';
+        case 'fuzzy':     return '#f5a623';
+        default:          return 'transparent';
+      }
+    }
+
+    function stateLabel(state) {
+      switch (state) {
+        case 'confident': return '踏破済み';
+        case 'obstacle':  return '障害';
+        case 'fuzzy':     return 'あいまい';
+        case 'frontier':  return 'フリンジ';
+        default:          return '未踏';
+      }
+    }
+
+    // ── Draw ──
+    function drawArrow(x1, y1, x2, y2, color, width, dashed) {
+      const dx = x2 - x1, dy = y2 - y1;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 1) return;
+
+      // Shorten to not overlap node
+      const nodeRadius = 16;
+      const ratio1 = nodeRadius / dist;
+      const ratio2 = (dist - nodeRadius - 8) / dist;
+      const sx = x1 + dx * ratio1, sy = y1 + dy * ratio1;
+      const ex = x1 + dx * ratio2, ey = y1 + dy * ratio2;
+
+      ctx.save();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = width;
+      if (dashed) ctx.setLineDash([4, 6]);
+      ctx.beginPath();
+      ctx.moveTo(sx, sy);
+      ctx.lineTo(ex, ey);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Arrowhead
+      const headLen = 8;
+      const angle = Math.atan2(ey - sy, ex - sx);
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.moveTo(ex, ey);
+      ctx.lineTo(ex - headLen * Math.cos(angle - 0.35), ey - headLen * Math.sin(angle - 0.35));
+      ctx.lineTo(ex - headLen * Math.cos(angle + 0.35), ey - headLen * Math.sin(angle + 0.35));
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function render() {
+      ctx.clearRect(0, 0, W, H);
+
+      // Draw faint ring guides
+      ctx.save();
+      for (let d = 0; d <= maxDepth; d++) {
+        const r = scale * (1 - d / (maxDepth + 0.5));
+        ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // Draw edges
+      graphData.edges.forEach(e => {
+        const a = nodeMap[e.from], b = nodeMap[e.to];
+        if (!a || !b) return;
+        const bothConfident = a.state === 'confident' && b.state === 'confident';
+        const color = bothConfident
+          ? `rgba(74, 232, 196, ${0.15 + e.score * 0.2})`
+          : `rgba(80, 80, 100, ${0.08 + e.score * 0.12})`;
+        const width = 0.5 + e.score * 1.5;
+        drawArrow(a.x, a.y, b.x, b.y, color, width, !bothConfident);
+      });
+
+      // Draw nodes
+      const nodes = Object.values(nodeMap);
+      nodes.forEach(n => {
+        const radius = 8 + n.score * 16;
+        const color = stateColor(n.state, n.value);
+        const glow = glowColor(n.state);
+
+        ctx.save();
+
+        // Glow
+        if (n.state === 'confident' || n.state === 'obstacle' || n.state === 'frontier') {
+          ctx.shadowColor = glow;
+          ctx.shadowBlur = n.state === 'confident' ? 12 + n.value * 10 : 8;
+        }
+
+        // Node circle
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Frontier ring
+        if (n.state === 'frontier') {
+          ctx.shadowBlur = 0;
+          ctx.strokeStyle = '#7fff7f';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, radius + 4, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+
+        ctx.restore();
+
+        // Value indicator (inner brightness fill)
+        if (n.value > 0 && n.state !== 'confident') {
+          ctx.save();
+          ctx.globalAlpha = 0.3;
+          ctx.fillStyle = '#4ae8c4';
+          ctx.beginPath();
+          // Partial fill arc from bottom, proportional to value
+          const fillAngle = n.value * Math.PI * 2;
+          ctx.moveTo(n.x, n.y);
+          ctx.arc(n.x, n.y, radius * 0.7, -Math.PI / 2, -Math.PI / 2 + fillAngle);
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+        }
+
+        // Label
+        const labelAlpha = n.state === 'confident' ? 0.95
+          : n.state === 'frontier' || n.state === 'obstacle' ? 0.75
+          : n.state === 'fuzzy' ? 0.5
+          : 0.25;
+        ctx.save();
+        ctx.fillStyle = `rgba(255, 255, 255, ${labelAlpha})`;
+        ctx.font = `${radius < 14 ? 10 : 12}px 'Segoe UI', sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillText(n.label, n.x, n.y + radius + 4);
+
+        // Value percentage
+        if (n.value > 0) {
+          ctx.font = '9px monospace';
+          ctx.fillStyle = `rgba(255, 255, 255, ${labelAlpha * 0.7})`;
+          ctx.fillText(Math.round(n.value * 100) + '%', n.x, n.y + radius + 18);
+        }
+        ctx.restore();
+      });
+    }
+
+    render();
+
+    // ── Stats ──
+    const stats = Object.values(nodeMap);
+    const confidentCount = stats.filter(n => n.state === 'confident').length;
+    const obstacleCount = stats.filter(n => n.state === 'obstacle').length;
+    const frontierCount = stats.filter(n => n.state === 'frontier').length;
+    const unknownCount = stats.filter(n => n.state === 'unknown').length;
+    const fuzzyCount = stats.filter(n => n.state === 'fuzzy').length;
+    document.getElementById('stats').innerHTML =
+      `<span style="color:#4ae8c4">踏破 ${confidentCount}/${stats.length}</span>` +
+      `<span style="color:#e74c3c">障害 ${obstacleCount}</span>` +
+      `<span style="color:#7fff7f">フリンジ ${frontierCount}</span>` +
+      (fuzzyCount > 0 ? `<span style="color:#f5a623">あいまい ${fuzzyCount}</span>` : '') +
+      (unknownCount > 0 ? `<span style="color:#666">未踏 ${unknownCount}</span>` : '');
+
+    // ── Tooltip on hover ──
+    const tooltip = document.getElementById('tooltip');
+    canvas.addEventListener('mousemove', (e) => {
+      const mx = e.clientX, my = e.clientY;
+      let hit = null;
+      for (const n of Object.values(nodeMap)) {
+        const dx = mx - n.x, dy = my - n.y;
+        const r = 8 + n.score * 16;
+        if (dx * dx + dy * dy < (r + 4) * (r + 4)) { hit = n; break; }
+      }
+      if (hit) {
+        const prereqs = (inEdges[hit.id] || []).map(id => nodeMap[id]?.label).filter(Boolean);
+        const successors = (outEdges[hit.id] || []).map(id => nodeMap[id]?.label).filter(Boolean);
+        tooltip.style.display = 'block';
+        tooltip.style.left = (mx + 16) + 'px';
+        tooltip.style.top = (my - 10) + 'px';
+        tooltip.innerHTML =
+          `<div class="tt-label">${hit.label}</div>` +
+          `<div class="tt-value">獲得度: ${Math.round(hit.value * 100)}% / 重要度: ${hit.score}</div>` +
+          `<div class="tt-state" style="color:${glowColor(hit.state)}">${stateLabel(hit.state)}</div>` +
+          (prereqs.length > 0 ? `<div style="margin-top:4px;font-size:11px;color:#888">前提: ${prereqs.join(', ')}</div>` : '') +
+          (successors.length > 0 ? `<div style="font-size:11px;color:#888">次: ${successors.join(', ')}</div>` : '');
+      } else {
+        tooltip.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
