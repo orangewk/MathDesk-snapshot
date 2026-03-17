@@ -49,7 +49,7 @@
       <div class="legend-item"><div class="legend-dot" style="background:#4ae8c4;box-shadow:0 0 6px #4ae8c4"></div>踏破済み (80%+)</div>
       <div class="legend-item"><div class="legend-dot" style="background:#e6d23c"></div>あと少し</div>
       <div class="legend-item"><div class="legend-dot" style="background:#e69632"></div>途上</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#c84638"></div>つまずき</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#c84638;position:relative"><span style="position:absolute;top:-3px;left:0;font-size:10px">⚠</span></div>障害（⚠マーク）</div>
       <div class="legend-item"><div class="legend-dot" style="background:#555;border:1px solid #999"></div>未踏</div>
       <div class="legend-item"><div class="legend-dot" style="background:#7fff7f;border:2px solid #7fff7f"></div>フリンジ</div>
     </div>
@@ -456,6 +456,16 @@
           ctx.beginPath();
           ctx.arc(n.x, n.y, radius + 4, 0, Math.PI * 2);
           ctx.stroke();
+        }
+
+        // Obstacle marker: ⚠ icon
+        if (n.state === 'obstacle') {
+          ctx.shadowBlur = 0;
+          ctx.font = `${radius * 1.1}px sans-serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillStyle = 'rgba(255, 220, 40, 0.9)';
+          ctx.fillText('⚠', n.x, n.y);
         }
 
         ctx.restore();
