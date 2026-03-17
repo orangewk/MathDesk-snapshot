@@ -253,7 +253,7 @@
         case 'obstacle':  return `rgba(231, 76, 60, ${0.5 + value * 0.5})`;
         case 'fuzzy':     return `rgba(245, 166, 35, ${0.3 + value * 0.5})`;
         case 'frontier':  return 'rgba(127, 255, 127, 0.7)';
-        default:          return 'rgba(80, 80, 100, 0.4)';
+        default:          return 'transparent'; // unknown: outline only
       }
     }
 
@@ -346,8 +346,9 @@
           width = 0.5 + e.score * 1.5;
           dashed = false;
         } else {
-          color = `rgba(80, 80, 100, ${0.08 + e.score * 0.12})`;
-          width = 0.5 + e.score * 1.5;
+          // Fog edges: light gray, visible but muted
+          color = `rgba(160, 160, 180, ${0.15 + e.score * 0.2})`;
+          width = 0.5 + e.score * 1;
           dashed = true;
         }
         drawArrow(a.x, a.y, b.x, b.y, color, width, dashed);
@@ -369,10 +370,19 @@
         }
 
         // Node circle
-        ctx.fillStyle = color;
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, radius, 0, Math.PI * 2);
-        ctx.fill();
+        if (n.state === 'unknown') {
+          // Unknown: gray outline only — silhouette in the fog
+          ctx.strokeStyle = 'rgba(160, 160, 180, 0.45)';
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, radius, 0, Math.PI * 2);
+          ctx.stroke();
+        } else {
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, radius, 0, Math.PI * 2);
+          ctx.fill();
+        }
 
         // Frontier ring
         if (n.state === 'frontier') {
@@ -405,7 +415,7 @@
         const labelAlpha = n.state === 'confident' ? 0.95
           : n.state === 'frontier' || n.state === 'obstacle' ? 0.75
           : n.state === 'fuzzy' ? 0.5
-          : 0.25;
+          : 0.45; // unknown: readable gray, not hidden
         ctx.save();
         ctx.fillStyle = `rgba(255, 255, 255, ${labelAlpha})`;
         ctx.font = `${radius < 14 ? 10 : 12}px 'Segoe UI', sans-serif`;
