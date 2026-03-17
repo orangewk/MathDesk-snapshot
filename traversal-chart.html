@@ -463,13 +463,16 @@
           ctx.stroke();
         }
 
-        // Obstacle marker: ⚠ icon
+        // Obstacle marker: ⚠ icon with dark outline for contrast
         if (n.state === 'obstacle') {
           ctx.shadowBlur = 0;
-          ctx.font = `${radius * 1.1}px sans-serif`;
+          ctx.font = `bold ${radius * 1.2}px sans-serif`;
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
-          ctx.fillStyle = 'rgba(255, 220, 40, 0.9)';
+          ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
+          ctx.lineWidth = 3;
+          ctx.strokeText('⚠', n.x, n.y);
+          ctx.fillStyle = '#ff4444';
           ctx.fillText('⚠', n.x, n.y);
         }
 
