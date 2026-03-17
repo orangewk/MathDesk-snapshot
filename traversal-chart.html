@@ -333,11 +333,23 @@
         const a = nodeMap[e.from], b = nodeMap[e.to];
         if (!a || !b) return;
         const bothConfident = a.state === 'confident' && b.state === 'confident';
-        const color = bothConfident
-          ? `rgba(74, 232, 196, ${0.15 + e.score * 0.2})`
-          : `rgba(80, 80, 100, ${0.08 + e.score * 0.12})`;
-        const width = 0.5 + e.score * 1.5;
-        drawArrow(a.x, a.y, b.x, b.y, color, width, !bothConfident);
+        const touchesObstacle = a.state === 'obstacle' || b.state === 'obstacle';
+        let color, width, dashed;
+        if (touchesObstacle) {
+          // Obstacle edges: red, clearly visible
+          color = `rgba(231, 76, 60, ${0.4 + e.score * 0.4})`;
+          width = 1.5 + e.score * 1.5;
+          dashed = false;
+        } else if (bothConfident) {
+          color = `rgba(74, 232, 196, ${0.15 + e.score * 0.2})`;
+          width = 0.5 + e.score * 1.5;
+          dashed = false;
+        } else {
+          color = `rgba(80, 80, 100, ${0.08 + e.score * 0.12})`;
+          width = 0.5 + e.score * 1.5;
+          dashed = true;
+        }
+        drawArrow(a.x, a.y, b.x, b.y, color, width, dashed);
       });
 
       // Draw nodes
