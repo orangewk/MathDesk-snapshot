@@ -161,7 +161,7 @@
       H = canvas.height = window.innerHeight;
       cx = W / 2;
       cy = H / 2;
-      scale = Math.min(W, H) * 0.38;
+      scale = Math.min(W, H) * 0.42;
     }
     resize();
     window.addEventListener('resize', () => { resize(); render(); });
@@ -193,52 +193,58 @@
     }
     layoutNodes();
 
-    // ── Simple force relaxation to reduce overlap ──
+    // ── Force relaxation to reduce overlap ──
+    // Label bounding box (approximate width in px)
+    function labelWidth(node) {
+      return node.label.length * 7 + 20; // rough px estimate
+    }
+
     function relax(iterations) {
       const nodes = Object.values(nodeMap);
       for (let iter = 0; iter < iterations; iter++) {
-        // Repulsion between all nodes
+        // Repulsion between all nodes — account for label size
         for (let i = 0; i < nodes.length; i++) {
           for (let j = i + 1; j < nodes.length; j++) {
             const a = nodes[i], b = nodes[j];
             let dx = b.x - a.x, dy = b.y - a.y;
             let dist = Math.sqrt(dx * dx + dy * dy) || 1;
-            const minDist = 60;
+            // Min distance based on the larger of the two labels
+            const minDist = Math.max(labelWidth(a), labelWidth(b), 120);
             if (dist < minDist) {
-              const force = (minDist - dist) / dist * 0.3;
+              const force = (minDist - dist) / dist * 0.4;
               const fx = dx * force, fy = dy * force;
               a.x -= fx; a.y -= fy;
               b.x += fx; b.y += fy;
             }
           }
         }
-        // Attract along edges (gentle)
+        // Attract along edges (gentle — keep connected nodes somewhat close)
         graphData.edges.forEach(e => {
           const a = nodeMap[e.from], b = nodeMap[e.to];
           if (!a || !b) return;
           let dx = b.x - a.x, dy = b.y - a.y;
           let dist = Math.sqrt(dx * dx + dy * dy) || 1;
-          const ideal = 100;
-          if (dist > ideal * 1.5) {
-            const force = (dist - ideal) / dist * 0.02;
+          const ideal = 160;
+          if (dist > ideal * 1.8) {
+            const force = (dist - ideal) / dist * 0.015;
             const fx = dx * force, fy = dy * force;
             a.x += fx; a.y += fy;
             b.x -= fx; b.y -= fy;
           }
         });
-        // Gravity toward center (gentle)
+        // Gravity toward target ring (weak — allow spread)
         nodes.forEach(n => {
           const di = depthMap[n.id];
           const targetR = scale * (1 - di / (maxDepth + 0.5));
           const dx = n.x - cx, dy = n.y - cy;
           const dist = Math.sqrt(dx * dx + dy * dy) || 1;
           const diff = dist - targetR;
-          n.x -= (dx / dist) * diff * 0.05;
-          n.y -= (dy / dist) * diff * 0.05;
+          n.x -= (dx / dist) * diff * 0.02;
+          n.y -= (dy / dist) * diff * 0.02;
         });
       }
     }
-    relax(200);
+    relax(400);
 
     // ── Color helpers ──
     function stateColor(state, value) {
