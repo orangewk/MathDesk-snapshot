@@ -92,13 +92,27 @@ The private repository contains 150+ documents (planning, investigation, testing
 - [Context Window Design](docs/context-window-design.md) — Prompt compression from 12K to 3.5K tokens, eliminating context loss observed at Turn 9
 - [Deployment Architecture](docs/external-deployment.md) — Firebase Hosting + Auth vs Cloud Run monolith comparison for external access
 
-## About This Snapshot
+## Public OSS Edition
 
-This is a public snapshot of an active private project. The following modifications were made for public release.
+This repository is the public OSS edition of MathDesk. It contains the code, selected design documents, and setup workflow that can be safely maintained in public while the full development repository remains private.
+
+The public edition is maintained for:
+
+- Local development and Docker setup reliability
+- The React / TypeScript / Node.js tutoring UI and API implementation
+- Publicly shareable parts of the skill tree, mastery assessment, figure rendering, and chat response architecture
+- Setup guides, design notes, and documentation improvements
+- Issues and pull requests for reproducibility, documentation fixes, portability, and maintainability
+
+The full dataset, detailed prompts, and operational evaluation logs are not included. This boundary protects safety, licensing, and unpublished research assets. The public code and design documents in this repository are available under the MIT license.
+
+Related research materials are published in [mathdesk-paper](https://github.com/orangewk/mathdesk-paper).
+
+## Public Scope and Redactions
+
+The following files preserve public API boundaries, type definitions, and sample structure while omitting prompt text and detailed data.
 
 ### Redacted Files (6)
-
-Function signatures, type definitions, and exports are preserved. Prompt text and detailed data are omitted.
 
 | File | Retained | Omitted |
 |------|----------|---------|
@@ -109,11 +123,23 @@ Function signatures, type definitions, and exports are preserved. Prompt text an
 | `prompts/technique-extraction.ts` | Types, parser, skill ID list generator | Main extraction prompt, few-shot examples |
 | `data/backtrack-rules.ts` | Types, helpers, 3 sample rules | Remaining 27 backtrack rules |
 
-### Other Notes
+### Current Limitations
 
-- **Not a standalone deployment**: Requires your own GCP project, Gemini API access, and Firebase setup
+- **Cloud dependencies**: Requires your own GCP project, Gemini API access, and Firebase setup
 - **Design documents**: 4 selected documents included. Internal issue numbers and dates have been removed
 - **BGM files omitted**: Music files (`webapp/public/bgm/`) are excluded due to size. The BGM player UI and code remain intact
+
+## Contributing
+
+Issues and pull requests are welcome. The public edition especially benefits from:
+
+- Setup, Docker, and environment variable documentation improvements
+- Reproducibility improvements around Firebase, GCP, and Gemini API setup
+- TypeScript types, tests, linting, and CI maintenance
+- Math tutoring UI, figure rendering, and accessibility improvements
+- Documentation, design notes, and Japanese/English translation fixes
+
+Requests involving unpublished prompts, private datasets, or commercial use of the full concept graph are handled separately.
 
 ## License
 
